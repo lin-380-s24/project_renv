@@ -24,7 +24,7 @@ USER $DEFAULT_USER
 RUN quarto install tinytex
 
 # Layer 3: R packages
-RUN R -e "install.packages(c('renv'), repos = 'https://cran.rstudio.com')"
+RUN R -e "install.packages(c('renv', 'yaml'), repos = 'https://cran.rstudio.com')"
 
 # Layer 4: Finalize the image
 USER root
