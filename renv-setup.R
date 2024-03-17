@@ -1,8 +1,20 @@
-# About
-# This script is used to restore the renv environment for the project.
+# Check if renv.lock file exists
+if (file.exists("renv.lock")) {
+  # Load the renv package
+  if (!requireNamespace("renv", quietly = TRUE)) {
+    install.packages("renv")
+  }
 
-# Load the renv package
-library(renv)
+  # Restore the renv environment
+  renv::restore()
 
-# Restore the renv environment
-renv::restore()
+  # Check if running in RStudio
+  if (!requireNamespace("rstudioapi", quietly = TRUE)) {
+    install.packages("rstudioapi")
+  }
+
+  # Restart R session
+  rstudioapi::restartSession()
+} else {
+  message("No renv.lock file found in the current directory.")
+}
