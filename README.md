@@ -24,7 +24,14 @@ To set up the environment for this project, follow these steps:
 4. Open your web browser and navigate to `http://localhost:8787`.
 5. Log in with the username `rstudio` and the password `rstudio`.
 6. Clone this repository to your RStudio environment as a new project.
-7. Open (and source)/ Source the `renv-setup.R` script to install the project's R package dependencies and their versions.
+7. Run the following two commands in the R Console:
+
+```r
+renv::activate()
+renv::restore(prompt = FALSE)
+```
+
+*This will take a while to complete.*
 
 ## Usage
 
