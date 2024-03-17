@@ -1,10 +1,16 @@
 # Dockerfile
 # Aims to build up a Docker image with the following steps:
 
-# Layer 1:
+# Layer 1: OS, system, and software dependencies
 FROM rocker/r-ver:4.3.2
 
 # Layer 2: Software
+
+# Particular system libraries for R packages
+RUN apt-get update && apt-get install -y \
+    libxml2-dev \
+    libfontconfig1-dev \
+    libpoppler-cpp-dev
 
 # Environment variables
 ENV DEFAULT_USER=rstudio
@@ -21,10 +27,16 @@ RUN /rocker_scripts/install_quarto.sh
 # Change to default user
 USER $DEFAULT_USER
 
-RUN quarto install tinytex
-
 # Layer 3: R packages
-RUN R -e "install.packages(c('renv'), repos = 'https://cran.rstudio.com')"
+RUN R -e "install.packages(c('renv', 'tinytex'), repos = 'https://cran.rstudio.com')"
+
+# Install TinyTeX
+# Conditionally run commands based on architecture
+RUN if [ "$(uname -m)" = "x86_64" ]; then \
+      quarto install tinytex; \
+    elif [ "$(uname -m)" = "aarch64" ]; then \
+      R -e "tinytex::install_tinytex()"; \
+    fi
 
 # Layer 4: Finalize the image
 USER root
