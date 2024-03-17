@@ -1,7 +1,10 @@
+## About
+
+This project is a template for a reproducible research project using R, RMarkdown, and Quarto. It is designed to be run in a Docker container with RStudio Server. ...
+
 ## Instructions
 
-
-## Prerequisites
+### Prerequisites
 
 To run this project, you will need to install the following dependencies:
 
@@ -12,7 +15,7 @@ To run this project, you will need to install the following dependencies:
   - `git` command-line tool (Windows, Mac, Linux)
     - Windows: https://git-scm.com/download/win
 
-## Setup
+### Setup
 
 To set up the environment for this project, follow these steps:
 
@@ -33,7 +36,7 @@ renv::restore(prompt = FALSE)
 
 *This will take a while to complete.*
 
-## Usage
+### Usage
 
 Render the project. Either:
 

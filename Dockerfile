@@ -6,11 +6,28 @@ FROM rocker/r-ver:4.3.2
 
 # Layer 2: Software
 
-# Particular system libraries for R packages
-RUN apt-get update && apt-get install -y \
+# Update the linux system/ install apt-get packages.
+RUN apt-get -y update && \
+    apt-get -y install \
+    libxt6 \
+    zlib1g-dev \
+    libpng-dev \
+    libpoppler-cpp-dev \
     libxml2-dev \
+    libgit2-dev \
+    libcurl4-openssl-dev \
     libfontconfig1-dev \
-    libpoppler-cpp-dev
+    libssl-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libfreetype6-dev \
+    libtiff5-dev \
+    libjpeg-dev \
+    cmake \
+    python3
+
+# Clean up the apt-get installations.
+RUN rm -rf /var/lib/apt/lists/*
 
 # Environment variables
 ENV DEFAULT_USER=rstudio
