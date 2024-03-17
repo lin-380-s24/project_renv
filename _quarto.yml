@@ -1,0 +1,29 @@
+project:
+  title: "Spanish lexical diversity"
+  type: website
+
+website:
+  title: "Spanish lexical diversity"
+  repo-url: "https://github.com/user/repo"
+  site-url: "https://user.github.io/repo"
+  repo-actions: [source, issue]
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - index.qmd
+      - section: "Process"
+        contents: process/*
+      - section: "Reports"
+        contents: reports/*
+
+format:
+  html:
+    theme: journal
+    toc: true
+
+execute:
+  freeze: auto
+
+bibliography: [bibliography.bib, packages.bib]
+biblio-style: apalike

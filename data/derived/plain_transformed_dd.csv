@@ -1,0 +1,5 @@
+variable,name,variable_type,description
+doc_id,Document ID,numeric,Unique identifier for each document
+country,Country,categorical,Country where the event described in the document took place
+year,Year,numeric,Year when the event described in the document occurred
+text,Text,categorical,Textual description of the event documented

@@ -1,0 +1,149 @@
+---
+title: Transform
+---
+
+```{r}
+#| label: load-packages
+#| message: false
+
+library(dplyr)    # for data manipulation
+library(stringr)  # for string manipulation
+library(readr)    # for reading in data
+library(tidytext) # for text analysis
+library(ggplot2)  # for data visualization
+library(qtalrkit) # [ ] for data dictionary creation
+library(qtkit)    # for data dictionary creation
+library(knitr)    # for table formatting
+```
+
+## Overview
+
+In this research, we aim to understand lexical diversity differences between the Spanish varieties. In particular, we want to understand the usage differences between 'aquí' (here) and 'acá' (here) in the Spanish language.
+
+Let's load in the `plain` version of the ACTIVES corpus we curated.
+
+```{r}
+#| label: load-data
+#| message: false
+
+# Load in the data
+plain_tbl <- read_csv("../data/derived/plain_curated.csv")
+
+glimpse(plain_tbl)
+```
+
+## Preparation
+
+The curated data includes some variables that we can drop as they do not provide any useful information for our analysis. Those that we need to keep include:
+
+- `text`: the text of the transcript
+- `country`: the country of transcript
+
+We will want a `doc_id`, but the current values of `doc_id` are too verbose and we can simplify them with numeric values.
+
+Furthermore, the `year` variable is not strictly necessary for our analysis, but we will keep it for now. It could become useful as we apply our exploratory analysis.
+
+```{r}
+#| label: drop-variables
+
+# Drop variables
+plain_tr_tbl <-
+  plain_tbl |>
+    select(doc_id, country, year, text) |>
+    mutate(doc_id = row_number())
+
+glimpse(plain_tr_tbl)
+```
+
+Now, we will want to transform the `text` variable. In one case, we will want to tokenize the text into words. However, if later we want to analyze the the words that cooccur with 'aquí' and 'acá', we can use the `plain_tr_tbl` as is.
+
+Let's create a new variable `token` that will contain the tokenized text. We will also keep the `text` variable.
+
+```{r}
+#| label: tokenize-text
+
+# Tokenize the text
+plain_tr_tok_tbl <-
+  plain_tr_tbl |>
+  unnest_tokens(token, text)
+
+glimpse(plain_tr_tok_tbl)
+```
+
+Now, let's take a look at the relative frequency of 'aquí' and 'acá' in the corpus.
+
+```{r}
+#| label: fig-relative-frequency-prop
+#| fig-cap: Relative frequency and proportions of 'aquí' and 'acá' in the corpus
+#| fig-alt: Relative frequency and proportions of 'aquí' and 'acá' in the corpus
+
+# Calculate the relative frequency and proportions
+# of 'aquí' and 'acá' across countries
+aqui_aca_country <-
+  plain_tr_tok_tbl |>
+  count(country, token) |>
+  group_by(country) |>
+  mutate(token_relative = n / n()) |>
+  filter(token %in% c("aquí", "acá")) |>
+  mutate(token_prop = (token_relative/ sum(token_relative)) * 100)
+
+aqui_aca_country |>
+  ggplot(aes(x = country, y = token_prop, fill = token)) +
+  geom_col(position = "dodge")
+```
+
+## Write datasets
+
+```{r}
+#| label: write-dataset
+#| message: false
+
+# Write the dataset
+write_csv(plain_tr_tok_tbl, "../data/derived/plain_tokens_transformed.csv")
+write_csv(plain_tr_tbl, "../data/derived/plain_transformed.csv")
+```
+
+## Data dictionary
+
+Use the `create_data_dictionary()` from `qtalrkit` to create a data dictionary for the transformed dataset.
+
+```{r}
+#| label: data-dictionary
+#| message: false
+
+# Create a data dictionary
+qtalrkit::create_data_dictionary(
+  data = plain_tr_tok_tbl,
+  file_path = "../data/derived/plain_tokens_transformed_dd.csv",
+  model = "gpt-3.5-turbo"
+)
+
+qtalrkit::create_data_dictionary(
+  data = plain_tr_tbl,
+  file_path = "../data/derived/plain_transformed_dd.csv",
+  model = "gpt-3.5-turbo"
+)
+```
+
+View the data dictionary.
+
+```{r}
+#| label: tbl-view-data-dictionary-tokens
+#| tbl-cap: Data dictionary for the token transformed dataset
+#| message: false
+
+# View the data dictionary
+read_csv("../data/derived/plain_tokens_transformed_dd.csv") |>
+  kable()
+```
+
+```{r}
+#| label: tbl-view-data-dictionary
+#| tbl-cap: Data dictionary for the transformed dataset
+#| message: false
+
+# View the data dictionary
+read_csv("../data/derived/plain_transformed_dd.csv") |>
+  kable()
+```
+

@@ -1,0 +1,10 @@
+author: "Author Name"
+date-format: medium
+format:
+  revealjs:
+    theme: [simple]
+    code-overflow: wrap
+    hash-type: number
+    embed-resources: false
+execute:
+  echo: true

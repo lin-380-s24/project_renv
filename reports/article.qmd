@@ -1,0 +1,34 @@
+---
+title: "Article"
+date: 2024-02-20
+author:
+  - name: "Your name"
+    email: youremail@school.edu
+    affiliation: "Your affiliation"
+abstract: |
+  This is a sample report. It is a work in progress and will be updated as the semester progresses.
+keywords:
+  - report
+  - sample
+citation: true
+---
+
+# Introduction
+
+## Background
+
+## Objectives
+
+# Methods
+
+## Data
+
+## Analysis
+
+# Results
+
+# Discussion
+
+# Conclusion
+
+# References

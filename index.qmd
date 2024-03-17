@@ -1,0 +1,34 @@
+---
+title: README
+---
+
+## Project description
+
+<!--
+
+How do the dialects of the different regions of the Spanish-speaking world differ in terms of the use of `aquí` and `acá`?
+
+Are the specific uses of `aquí` and `acá` in the different regions of the Spanish-speaking world? Language context differences, cooccurrence with other words, etc.
+
+-->
+
+
+**Title**: "ACTIV-ES: comparable Spanish corpus comprised of film dialogue from Argentine, Mexican and Spanish productions (v.0.1)"
+
+**DESCRIPTION**: ACTIV-ES is a comparable Spanish corpus comprised of film dialogue from Argentine, Mexican and Spanish productions. Titles for each of these three countries were seeded from the Internet Movie Database, subtitle data for the hearing impaired was provided by Opensubtitles.org and was post-processed to correct/remove subtitle, OCR and diacritic artifacts and annotated for part-of-speech.
+
+The data is available in two main formats: 1) running text for each document and 2) 1:5 gram aggregate files. Each format includes a plain text and part-of-speech annotated version. Document names reflect the language code, country, year, title, type, genre (first genre listed in the IMDb), and IMDb ID.
+
+A version of the tagged running format corpus in the /eagles directory has been added which includes the EAGLES tagset. This tagset is much more fleshed out than the simplified tagset in the /tagged directory. For information on the tagset refer here: http://nlp.lsi.upc.edu/freeling/doc/tagsets/tagset-es.html.
+
+**Github repository**: <https://github.com/francojc/activ-es>
+
+## Citation information
+
+Francom, J., Hulden, M. and Ussishkin, A.. (2014) ACTIV-ES: a comparable, cross-dialect corpus of ‘everyday’ Spanish from Argentina, Mexico, and Spain. In Proceedings of the Ninth Annual Language Resources and Evaluation Conference, Reykjavik, Iceland. European Language Resources Association (ELRA). @Francom2014
+
+## License information
+
+[GPL-2.0](https://github.com/francojc/activ-es/blob/master/LICENSE)
+
+## References

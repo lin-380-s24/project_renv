@@ -1,0 +1,10 @@
+variable,name,variable_type,description
+doc_id,Document ID,categorical,An identifier for the document
+text,Text,categorical,The text of the document
+lang,Language,categorical,The language the document is in
+country,Country,categorical,The country the document is from
+year,Year,ordinal,The year the document was created
+title,Title,categorical,The title of the document
+type,Type,categorical,"The type of the document (e.g., movie, tv-series, tv-movie)"
+genre,Genre,categorical,The genre of the document
+imdb_id,IMDB ID,categorical,An identifier for the document in the IMDB database

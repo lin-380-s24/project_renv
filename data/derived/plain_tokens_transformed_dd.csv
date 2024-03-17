@@ -1,0 +1,6 @@
+variable,name,variable_type,description
+doc_id,Document ID,numeric,Unique identifier for each document
+country,Country,categorical,Country where the document was produced
+year,Year,numeric,Year when the document was created
+text,Text,categorical,Content of the document
+token,Token,categorical,Tokenized words from the document

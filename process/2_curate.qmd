@@ -1,0 +1,171 @@
+---
+title: "Curate"
+---
+
+```{r}
+#| label: load-packages
+#| message: false
+
+library(readtext)   # for reading in text files
+library(dplyr)      # for data manipulation
+library(stringr)    # string operations
+library(qtkit)      # for creating data dictionaries
+library(qtalrkit)   # [ ] temporary
+library(readr)      # for reading in csv files
+library(knitr)      # for tables
+library(fs)         # for directory structure
+```
+
+## Overview
+
+The goal of this script is to curate the `plain` and `eagles` datasets. The structure will be as follows:
+
+Language | country | year | title | type | genre | imbd_id | transcript |
+|---------|------|-------|------|-------|---------| ---------- | ----------- |
+| ...        | ...     | ...      | ...     | ...      | ...        | ...         | ...           |
+
+The filenames contain the first 6 variables, then the actual conttents of the file are the transcript. Example:
+
+```
+es_Spain_2008_El-truco-del-manco_movie_n_1190905.run
+```
+
+## Curate
+
+The approach will be to use the `readtext` package's `readtext()` function.
+
+```{r}
+#| label: read-data-readtext-plain
+#| message: false
+
+# Read in the plain text files
+plain_df <-
+  readtext("../data/original/plain/*.run", # read in all .run files
+  docvarsfrom = "filenames", # get variables from filenames
+  docvarnames = c("lang", "country", "year", "title", "type", "genre", "imdb_id"), # variables from filenames
+  dvsep = "_", # delimiter
+  verbosity = 0) # suppress messages (.run is not .txt)
+
+glimpse(plain_df)
+```
+
+```{r}
+#| label: read-data-readtext-eagles
+#| message: false
+
+# Read in the eagles text files
+eagles_df <-
+  readtext("../data/original/eagles/*.eagles", # read in all .run files
+  docvarsfrom = "filenames", # get variables from filenames
+  docvarnames = c("lang", "country", "year", "title", "type", "genre", "imdb_id"), # variables from filenames
+  dvsep = "_", # delimiter
+  verbosity = 0) # suppress messages (.eagles is not .txt)
+
+glimpse(eagles_df)
+```
+
+Now I'm not going to change this data too much as we are just curating at this point. But I noticed that the number of rows differ between the two datasets. To see why let's first get rid of the `.run` and `.eagles` extensions from the `doc_id` columns.
+
+```{r}
+#| label: clean-data-doc_id
+
+# Remove the .run and .eagles extensions from the doc_id column
+plain_df <-
+  plain_df |>
+  mutate(doc_id = str_remove(doc_id, ".run"))
+
+eagles_df <-
+  eagles_df |>
+  mutate(doc_id = str_remove(doc_id, ".eagles"))
+```
+
+Now we can where the rows differ.
+
+```{r}
+#| label: clean-data-rows-differ
+
+# Rows that are in eagles but not plain
+eagles_df |>
+  anti_join(plain_df, by = "doc_id") |>
+  count(lang, country, year, title, type, genre, imdb_id)
+```
+
+We will ignore this for the moment, but this is something to keep in mind.
+
+## Write
+
+Let's write these two datasets to disks as `plain_curated.csv` and `eagles_curated.csv`.
+
+```{r}
+#| label: write-data
+
+# Write the datasets to disk
+write_csv(plain_df, "../data/derived/plain_curated.csv")
+write_csv(eagles_df, "../data/derived/eagles_curated.csv")
+```
+
+### Dataset
+
+### Data dictionary
+
+The following function from the `qtkit` package will create a data dictionary for the dataset.
+
+Here are the data dictionaries:
+
+Plain in @tbl-create-data-dictionary-plain
+
+```{r}
+#| label: create-data-dictionary-plain
+#| message: false
+
+create_data_dictionary(
+  data = plain_df, # path to data
+  file_path = "../data/derived/plain_curated_dd.csv", # path to save data dictionary
+  model = "gpt-4" # OpenAI model (gpt-3.5-turbo, gpt-4)
+)
+```
+
+```{r}
+#| label: tbl-create-data-dictionary-plain
+#| tbl-cap: "Data dictionary for the `plain` dataset."
+#| message: false
+
+read_csv("../data/derived/plain_curated_dd.csv") |>
+  kable()
+```
+
+Eagles in @tbl-create-data-dictionary-eagles
+
+```{r}
+#| label: create-data-dictionary-eagles
+#| message: false
+
+create_data_dictionary(
+  data = eagles_df, # path to data
+  file_path = "../data/derived/eagles_curated_dd.csv", # path to save data dictionary
+  model = "gpt-4" # OpenAI model (gpt-3.5-turbo, gpt-4)
+)
+```
+
+View the data dictionary for the `plain` dataset.
+
+```{r}
+#| label: tbl-create-data-dictionary-eagles
+#| tbl-cap: "Data dictionary for the `eagles` dataset."
+#| message: false
+
+read_csv("../data/derived/eagles_curated_dd.csv") |>
+  kable()
+```
+
+
+## Directory structure
+
+Here is the data directory structure of the project.
+
+```{r}
+#| label: directory-structure
+
+# Directory structure
+  dir_tree("../data", recurse = 2)
+```

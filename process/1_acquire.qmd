@@ -1,0 +1,97 @@
+---
+title: "Acquire"
+---
+
+## Overview
+
+The aim of this script is to acquire the data from the ACTIV-ES project. The data is hosted on GitHub <https://github.com/francojc/activ-es>. The data is downloaded from the GitHub repository and saved in the `data/original` folder.
+
+There are three versions of this data:
+
+- `plain.zip`
+  - Running test version.
+- `tagged.zip`
+  - POS tagged version ([Penn tagset](https://userpage.fu-berlin.de/~structeng/wiki/doku.php?id=corpora:tagset-penn)).
+- `eagles.zip`
+  - POS tagged version ([EAGLES tagset](https://www.sketchengine.eu/spanish-freeling-part-of-speech-tagset/) or the [Freeling repo](https://github.com/TALP-UPC/FreeLing/blob/master/doc/tagsets/tagset-es.html)).
+
+Here are some considerations for our approach:
+
+- One use of this data will be to demonstrate working with running, unstructured text. So we will use the `plain.zip` version of the data.
+
+- Another potential use would be to explore the verbal paradigms of the verbs in the data. For this we would need the POS tagged version of the data. The `eagles.zip` version of the data is tagged with the EAGLES tagset (which is very robust, more so than the Penn tagset).
+
+## Acquire
+
+So the idea is to download the `plain.zip` version and the `eagles.zip` version of the data. We will save the `plain.zip` version and the `eagles.zip` version in the `data/original` folder. Each will have the own subfolders: `plain` and `eagles`.
+
+Let's load the key packages for this task.
+
+```{r}
+#| label: acquire-load-packages
+
+# Load packages
+library(dplyr)        # for data manipulation
+library(qtkit)        # for get_archive_data(), create_data_origin()
+                      # functions
+library(readr)        # for read_csv(
+library(knitr)        # for kable()
+library(fs)           # for dir_tree()
+```
+
+Now to download and write the data to the respective folders.
+
+```{r}
+#| label: acquire-download-data
+
+# Set the URL for the datasets
+plain_url <- "https://github.com/francojc/activ-es/raw/master/activ-es-v.02/corpus/plain.zip"
+
+eagles_url <- "https://github.com/francojc/activ-es/raw/master/activ-es-v.02/corpus/eagles.zip"
+
+# Download, unarchive, and write the data
+get_archive_data(plain_url,
+  target_dir = "../data/original/plain/",
+  confirmed = TRUE
+)
+get_archive_data(eagles_url,
+  target_dir = "../data/original/eagles/",
+  confirmed = TRUE
+)
+```
+
+The data for the `plain` and `eagles` versions of the data have been downloaded and saved in the `data/original` folder.
+
+## Data origin
+
+```{r}
+#| label: create-data-origin
+#| eval: false
+
+# Create data origin (interactively)
+create_data_origin(
+  file_path = "../data/original/actives_do.csv"
+)
+```
+
+View the data origin after creating and editing it.
+
+```{r}
+#| label: tbl-view-data-origin
+#| tbl-cap: "Data origin for the ACTIV-ES project."
+#| tbl-colwidths: [25, 75]
+#| message: false
+
+# View data origin
+read_csv("../data/original/actives_do.csv") |>
+  kable()
+```
+
+## Directory structure
+
+```{r}
+#| label: view-directory-structure
+
+# View the directory structure
+dir_tree("../data")
+```
