@@ -4,8 +4,8 @@ project:
 
 website:
   title: "Spanish lexical diversity"
-  repo-url: "https://github.com/user/repo"
-  site-url: "https://user.github.io/repo"
+  repo-url: "https://github.com/lin-380-s24/project_renv"
+  site-url: "https://lin-380-s24.github.io/project_renv"
   repo-actions: [source, issue]
   sidebar:
     style: "docked"
